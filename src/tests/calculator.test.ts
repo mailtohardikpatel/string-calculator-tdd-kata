@@ -23,8 +23,12 @@ describe("Calculator", () => {
     expect(calculator.add("1, 5, 6")).toBe(12);
   });
 
-	it("should be able to handle \n as a delimeter", () => {
+	it("should handle \n as a delimeter", () => {
     expect(calculator.add("1\n5, 6")).toBe(12);
   });
+
+	it("should be able to support delimeters at the beginning of the input", () => {
+    expect(calculator.add("//;\n1;2")).toBe(3);
+  })
 
 });
