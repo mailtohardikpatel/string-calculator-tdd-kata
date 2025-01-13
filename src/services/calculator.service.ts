@@ -1,45 +1,60 @@
+import { CUSTOM_DELIMETERS_MATCH, DELIMETER_REPLACE_VALUE, DELIMETER_SEARCH_VALUE, EXTRACT_DELIMETERS } from "../util/constant";
+
 export class Calculator {
-	constructor() {}
+	constructor() { }
+
+	private escapeRegex(delimiter: string): string {
+		return delimiter.replace(DELIMETER_SEARCH_VALUE, DELIMETER_REPLACE_VALUE);
+	}
 
 	private getDelimeterAndNumbers(input: string): {
-    delimeter: RegExp;
-    values: string;
-  } {
-    let delimeter = /,|\n/;
-    let numbers = input;
-    if (input.startsWith("//")) {
-      const delimeters = input.match(/^\/\/(.+)\n/);
-      if (delimeters) {
-        delimeter = new RegExp(delimeters[1]);
-        numbers = input.substring(delimeters[0].length);
-      }
-    }
-    return { delimeter, values: numbers! };
-  }
+		delimeter: RegExp;
+		values: string;
+	} {
+		let delimeters = [",", "\n"];
+		let numbers = input;
+		if (input.startsWith("//")) {
+			const customDelimeters = input.match(CUSTOM_DELIMETERS_MATCH);
+			if (customDelimeters!.length > 0) {
+				const rawDelimiters = customDelimeters![1];
+				if (rawDelimiters.startsWith("[") && rawDelimiters.endsWith("]")) {
+					const dlms = rawDelimiters.match(EXTRACT_DELIMETERS);
+					delimeters = dlms?.map((d) => d.slice(1, -1)) || [];
+				} else {
+					delimeters = [rawDelimiters];
+				}
+				numbers = input.substring(customDelimeters![0].length);
+			}
+		}
+		const delimiterRegex = new RegExp(
+			delimeters.map(this.escapeRegex).join("|")
+		);
+		return { delimeter: delimiterRegex, values: numbers! };
+	}
 
 	private checkNegativeNumbers(input: Array<number>): Array<number> {
-    const negativeNumbers = input.filter((value) => value < 0);
-    return negativeNumbers;
-  }
+		const negativeNumbers = input.filter((value) => value < 0);
+		return negativeNumbers;
+	}
 
 	add(input?: string): number {
 		if (!input) {
 			return 0;
 		}
-    const { delimeter, values } = this.getDelimeterAndNumbers(input);
-    const numbers = values.split(delimeter).map(Number);
+		const { delimeter, values } = this.getDelimeterAndNumbers(input);
+		const numbers = values.split(delimeter).map(Number);
 		const negativeNumbers = this.checkNegativeNumbers(numbers);
-    if (negativeNumbers.length > 0) {
-      throw new Error(
-        `Negative numbers not allowed, ${negativeNumbers.join(",")}`
-      );
-    }
+		if (negativeNumbers.length > 0) {
+			throw new Error(
+				`Negative numbers not allowed, ${negativeNumbers.join(",")}`
+			);
+		}
 		const total = numbers.reduce((a, b) => {
-      if (b > 1000) {
-        b = 0;
-      }
-      return a + b;
-    }, 0);
-    return total;
+			if (b > 1000) {
+				b = 0;
+			}
+			return a + b;
+		}, 0);
+		return total;
 	}
 }

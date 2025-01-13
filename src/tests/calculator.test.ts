@@ -41,4 +41,12 @@ describe("Calculator", () => {
     expect(calculator.add("1,2,3,4,1001")).toBe(10);
   });
 
+	it("should work when delimeter characters are more than 1", () => {
+    expect(calculator.add("//[***]\n1***2***3")).toBe(6);
+  });
+
+  it("should work with multiple delimeters", () => {
+    expect(calculator.add("//[*][%]\n1*2%3")).toBe(6);
+  });
+
 });
