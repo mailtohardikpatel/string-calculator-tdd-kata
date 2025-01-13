@@ -4,7 +4,8 @@ export class Calculator {
 		if (!input) {
 			return 0;
 		}
-		const values = input.split(",");
-		return parseInt(values[0]) + (parseInt(values[1]) || 0);
+		const values = input.split(",").map(Number);
+    const total = values.reduce((a, b) => a + b);
+    return total;
 	}
 }

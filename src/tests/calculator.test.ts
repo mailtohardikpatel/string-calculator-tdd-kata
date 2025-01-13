@@ -19,4 +19,8 @@ describe("Calculator", () => {
 		expect(calculator.add("1, 5")).toBe(6);
 	});
 
+	it("should accept multiple strings as an input and return total as a result", () => {
+    expect(calculator.add("1, 5, 6")).toBe(12);
+  });
+
 });
