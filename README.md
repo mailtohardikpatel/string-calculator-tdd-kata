@@ -4,7 +4,7 @@
 
 ### Tools and Technology
 
-- Node: v20.17.0
+- Node: v20.18.0
 - npm: v10 for managing the dependencies
 - Typescript: v5
 - Jest: v29 for writing the test cases
@@ -19,7 +19,7 @@
 5. `npm run test` will run unit tests and will generate result with coverage
 6. `npm run build` to generate the build
 
-### Folder structure overview
+### Directory structure
 
 1. `src/index` is the entry point and has the initialization part
 1. `src/services/` has the business logic service
