@@ -37,4 +37,8 @@ describe("Calculator", () => {
     }).toThrow("Negative numbers not allowed, -1,-5");
   });
 
+	it("should ignore the numbers which are greater than 1000", () => {
+    expect(calculator.add("1,2,3,4,1001")).toBe(10);
+  });
+
 });

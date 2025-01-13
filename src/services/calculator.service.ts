@@ -34,7 +34,12 @@ export class Calculator {
         `Negative numbers not allowed, ${negativeNumbers.join(",")}`
       );
     }
-    const total = numbers.reduce((a, b) => a + b);
+		const total = numbers.reduce((a, b) => {
+      if (b > 1000) {
+        b = 0;
+      }
+      return a + b;
+    }, 0);
     return total;
 	}
 }
