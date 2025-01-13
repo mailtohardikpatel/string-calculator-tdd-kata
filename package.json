@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "A calculator application developed using TDD approach",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "start": "ts-node src/index.ts",
     "build": "rm -rf dist && tsc",
