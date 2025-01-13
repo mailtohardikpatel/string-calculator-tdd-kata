@@ -17,12 +17,23 @@ export class Calculator {
     return { delimeter, values: numbers! };
   }
 
+	private checkNegativeNumbers(input: Array<number>): Array<number> {
+    const negativeNumbers = input.filter((value) => value < 0);
+    return negativeNumbers;
+  }
+
 	add(input?: string): number {
 		if (!input) {
 			return 0;
 		}
     const { delimeter, values } = this.getDelimeterAndNumbers(input);
     const numbers = values.split(delimeter).map(Number);
+		const negativeNumbers = this.checkNegativeNumbers(numbers);
+    if (negativeNumbers.length > 0) {
+      throw new Error(
+        `Negative numbers not allowed, ${negativeNumbers.join(",")}`
+      );
+    }
     const total = numbers.reduce((a, b) => a + b);
     return total;
 	}

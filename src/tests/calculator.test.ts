@@ -29,6 +29,12 @@ describe("Calculator", () => {
 
 	it("should be able to support delimeters at the beginning of the input", () => {
     expect(calculator.add("//;\n1;2")).toBe(3);
-  })
+  });
+
+	it("should throw abn error when input contains negative numbers", () => {
+    expect(() => {
+      calculator.add("1,2,5,-1,6,-5");
+    }).toThrow("Negative numbers not allowed, -1,-5");
+  });
 
 });
