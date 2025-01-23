@@ -1,4 +1,9 @@
-import { CUSTOM_DELIMETERS_MATCH, DELIMETER_REPLACE_VALUE, DELIMETER_SEARCH_VALUE, EXTRACT_DELIMETERS } from "../util/constant";
+import {
+	CUSTOM_DELIMETERS_MATCH,
+	DELIMETER_REPLACE_VALUE,
+	DELIMETER_SEARCH_VALUE,
+	EXTRACT_DELIMETERS,
+} from "../util/constant";
 
 export class Calculator {
 	constructor() { }
@@ -18,15 +23,16 @@ export class Calculator {
 			if (customDelimeters!.length > 0) {
 				const rawDelimiters = customDelimeters![1];
 				if (rawDelimiters.startsWith("[") && rawDelimiters.endsWith("]")) {
+					//'[*%*][**]'
 					const dlms = rawDelimiters.match(EXTRACT_DELIMETERS);
 					delimeters = dlms?.map((d) => d.slice(1, -1)) || [];
 				} else {
-					delimeters = [rawDelimiters];
+					delimeters = [rawDelimiters]; // *%*  **
 				}
 				numbers = input.substring(customDelimeters![0].length);
 			}
 		}
-		const delimiterRegex = new RegExp(
+		const delimiterRegex = new RegExp( ///\*\%\*|\*\*/
 			delimeters.map(this.escapeRegex).join("|")
 		);
 		return { delimeter: delimiterRegex, values: numbers! };
@@ -37,7 +43,7 @@ export class Calculator {
 		return negativeNumbers;
 	}
 
-	add(input?: string): number {
+	calculate(input?: string): number {
 		if (!input) {
 			return 0;
 		}
@@ -49,12 +55,27 @@ export class Calculator {
 				`Negative numbers not allowed, ${negativeNumbers.join(",")}`
 			);
 		}
-		const total = numbers.reduce((a, b) => {
-			if (b > 1000) {
-				b = 0;
-			}
+
+		const allowedNumbers = numbers.filter((num) => num < 1000)
+		let result: number = 0;
+		if (delimeter.test("*")) {
+			result = this.multiply(allowedNumbers);
+		} else {
+			result = this.add(allowedNumbers);
+		}
+
+		return result;
+	}
+
+	private add(numbers: number[]): number {
+		return numbers.reduce((a, b) => {
 			return a + b;
 		}, 0);
-		return total;
+	}
+
+	private multiply(numbers: number[]): number {
+		return numbers.reduce((a, b) => {
+			return a * b;
+		}, 1);
 	}
 }
