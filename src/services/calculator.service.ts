@@ -60,6 +60,9 @@ export class Calculator {
 		let result: number = 0;
 		if (delimeter.test("*")) {
 			result = this.multiply(allowedNumbers);
+		} else if (delimeter.test("o")) {
+			const oddNumbers = allowedNumbers.filter((num) => num % 2 !== 0)
+			result = this.add(oddNumbers);
 		} else {
 			result = this.add(allowedNumbers);
 		}

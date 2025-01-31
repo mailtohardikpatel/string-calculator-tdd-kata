@@ -53,4 +53,8 @@ describe("Calculator", () => {
 		expect(calculator.calculate("//*\n1*2*5")).toBe(10);
 	});
 
+	it("should be able to do sum of all the odd numbers if the delimeter is o", () => {
+		expect(calculator.calculate("//o\n1o2o5")).toBe(6);
+	});
+
 });
